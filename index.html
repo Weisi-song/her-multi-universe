@@ -160,6 +160,12 @@
 <body>
     <div class="bg"></div>
     <div class="mask"></div>
+    <!-- 背景音乐播放器 -->
+    <audio id="bgm" src="ni_kuaile.mp3" loop autoplay preload="auto" style="display:none"></audio>
+    <div id="bgm-control" style="position:fixed;left:24px;bottom:24px;z-index:200;display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.7);border-radius:18px;padding:6px 16px;box-shadow:0 2px 8px rgba(0,0,0,0.10);backdrop-filter:blur(6px);">
+        <button id="bgm-btn" style="background:none;border:none;font-size:1.3em;cursor:pointer;outline:none;">⏸️</button>
+        <span style="font-size:1em;color:#555;">BGM</span>
+    </div>
     <div class="chapter-nav">
         <button class="chapter-nav-btn" onclick="showPage('chapter1')" id="nav-ch1">第一章</button>
         <button class="chapter-nav-btn" onclick="showPage('chapter2')" id="nav-ch2">第二章</button>
@@ -293,6 +299,26 @@
         }
         // 加载页自动跳转到序言
         setTimeout(()=>{ showPage('preface'); }, 1800);
+        // BGM控制
+        const bgm = document.getElementById('bgm');
+        const bgmBtn = document.getElementById('bgm-btn');
+        let bgmPlaying = true;
+        bgm.volume = 0.5;
+        bgmBtn.onclick = function() {
+            if(bgmPlaying){
+                bgm.pause();
+                bgmBtn.textContent = '▶️';
+            }else{
+                bgm.play();
+                bgmBtn.textContent = '⏸️';
+            }
+            bgmPlaying = !bgmPlaying;
+        };
+        // 自动播放兼容性处理
+        window.addEventListener('touchstart', function once(){
+            if(bgm.paused){ bgm.play(); }
+            window.removeEventListener('touchstart', once);
+        });
     </script>
     <!--
     替换背景图片：
