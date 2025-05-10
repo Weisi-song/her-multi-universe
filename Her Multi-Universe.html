@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>她的多重宇宙——母亲节线上沉浸式交互影像展</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100vw;
+            height: 100vh;
+            font-family: 'PingFang SC', 'Microsoft YaHei', Arial, sans-serif;
+            background: #222;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .bg {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            width: 100vw;
+            height: 100vh;
+            background: url('your-image.PNG') center center/cover no-repeat;
+            z-index: 0;
+            filter: brightness(0.85) blur(0px);
+            transition: filter 0.5s;
+        }
+        .mask {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(255,255,255,0.25);
+            z-index: 1;
+        }
+        .main-center {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 0;
+        }
+        .center-card {
+            position: relative;
+            background: rgba(255,255,255,0.7);
+            border-radius: 18px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+            padding: 80px 28px 36px 28px;
+            max-width: 90vw;
+            min-width: 320px;
+            z-index: 2;
+            text-align: center;
+            transition: opacity 0.5s;
+            margin-top: 0;
+            margin-bottom: 32px;
+            overflow-y: auto;
+            max-height: 85vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        h1, h2, h3 {
+            font-weight: 700;
+            margin: 0 0 18px 0;
+            color: #2d3a4b;
+        }
+        .subtitle {
+            font-size: 1.1em;
+            color: #5b6b7a;
+            margin-bottom: 18px;
+        }
+        .btn {
+            margin-top: 24px;
+            padding: 12px 32px;
+            background: #f7c873;
+            color: #2d3a4b;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            transition: background 0.2s;
+        }
+        .btn:hover {
+            background: #ffe1a8;
+        }
+        .chapter {
+            margin-bottom: 32px;
+        }
+        .videos {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 18px;
+            justify-content: center;
+            margin-top: 18px;
+        }
+        .video-slot {
+            /* width: 260px; */
+            /* height: 160px; */
+            background: rgba(255,255,255,0.5);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #aaa;
+            font-size: 1em;
+            position: relative;
+            overflow: auto;
+        }
+        .video-slot video, .video-slot iframe {
+            width: auto;
+            height: auto;
+            max-width: 100%;
+            max-height: 70vh;
+            border: none;
+            border-radius: 12px;
+            object-fit: unset;
+        }
+        .end {
+            font-size: 1.2em;
+            color: #2d3a4b;
+            margin-top: 24px;
+        }
+        .chapter-nav {
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+            display: flex;
+            gap: 12px;
+            background: rgba(255,255,255,0.9);
+            border-radius: 0 0 12px 12px;
+            padding: 10px 18px 6px 18px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        .chapter-nav-btn {
+            background: none;
+            border: none;
+            color: #2d3a4b;
+            font-size: 1em;
+            padding: 6px 10px;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: background 0.2s;
+        }
+        .chapter-nav-btn.active, .chapter-nav-btn:hover {
+            background: #f7c873;
+        }
+        @media (max-width: 600px) {
+            .center-card { padding: 70px 4vw 18px 4vw; max-height: 80vh; }
+            .chapter-nav { padding: 8px 4vw 4px 4vw; }
+            .videos { flex-direction: column; gap: 12px; }
+            .video-slot { width: 90vw; height: 180px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg"></div>
+    <div class="mask"></div>
+    <div class="chapter-nav">
+        <button class="chapter-nav-btn" onclick="showPage('chapter1')" id="nav-ch1">第一章</button>
+        <button class="chapter-nav-btn" onclick="showPage('chapter2')" id="nav-ch2">第二章</button>
+        <button class="chapter-nav-btn" onclick="showPage('chapter3')" id="nav-ch3">第三章</button>
+        <button class="chapter-nav-btn" onclick="showPage('chapter4')" id="nav-ch4">第四章</button>
+        <button class="chapter-nav-btn" onclick="showPage('chapter5')" id="nav-ch5">第五章</button>
+    </div>
+    <div class="main-center">
+        <!-- 加载页 -->
+        <div class="center-card" id="loading">
+            <div style="font-size:1.3em;">正在加载关于她的一切...</div>
+        </div>
+        <!-- 序言页 -->
+        <div class="center-card" id="preface" style="display:none;">
+            <div style="font-size:1.1em;line-height:2;">
+                我们习惯叫她妈妈<br>
+                却常忘记她的人生<br>
+                是一幅尚未被完全打开的画卷<br>
+                此刻 请暂时摘下'母亲'的标签<br>
+                在光影流转中<br>
+                触摸她作为女儿、妻子、挚友<br>
+                职场人、旅行者的生命切面<br>
+                这些拼图碎片最终会组成<br>
+                一个比'伟大'更动人的答案
+            </div>
+            <button class="btn" onclick="showPage('home')">进入主页</button>
+        </div>
+        <!-- 主页导航 -->
+        <div class="center-card" id="home" style="display:none;">
+            <h1>她的多重宇宙</h1>
+            <div class="subtitle">每个身份都是她灵魂折射的光芒</div>
+            <button class="btn" onclick="showPage('chapter1')">进入宇宙 开启她的人生</button>
+        </div>
+        <!-- 第一章 -->
+        <div class="center-card" id="chapter1" style="display:none;">
+            <h2>第一章：永恒的少女</h2>
+            <div class="subtitle">在某个平行时空里<br>她永远是父母掌心跃动的晨露<br>那些撒娇时微皱的鼻尖<br>被宠溺时的眼角细纹<br>都是时光留给少女时代的封印</div>
+            <div class="videos">
+                <div class="video-slot"><video controls src="grand.MOV"></video></div>
+            </div>
+            <div style="margin-top:18px;display:flex;justify-content:space-between;width:100%;">
+                <span></span>
+                <button class="btn" onclick="showPage('chapter2')">下一章</button>
+            </div>
+        </div>
+        <!-- 第二章 -->
+        <div class="center-card" id="chapter2" style="display:none;">
+            <h2>第二章：星轨与恒星</h2>
+            <div class="subtitle">当两个独立星系相遇<br>他们用十年培育出<br>比爱情更恒久的默契<br>那些沉默的并肩而行<br>藏着成年人最浪漫的诗</div>
+            <div class="videos">
+                <div class="video-slot"><video controls src="dad.MOV"></video></div>
+                <div class="video-slot"><video controls src="fam.MOV"></video></div>
+            </div>
+            <div style="margin-top:18px;display:flex;justify-content:space-between;width:100%;">
+                <button class="btn" onclick="showPage('chapter1')">上一章</button>
+                <button class="btn" onclick="showPage('chapter3')">下一章</button>
+            </div>
+        </div>
+        <!-- 第三章 -->
+        <div class="center-card" id="chapter3" style="display:none;">
+            <h2>第三章：生命的涟漪</h2>
+            <div class="subtitle">我们溅起的每朵水花<br>都重塑着她生命的形状<br>她用青春置换我们的远方<br>却把叹息藏进厨房的烟火</div>
+            <div class="videos">
+                <div class="video-slot"><video controls src="ni.MOV"></video></div>
+                <div class="video-slot"><video controls src="2zhen.MOV"></video></div>
+                <div class="video-slot"><video controls src="zhen.MOV"></video></div>
+            </div>
+            <div style="margin-top:18px;display:flex;justify-content:space-between;width:100%;">
+                <button class="btn" onclick="showPage('chapter2')">上一章</button>
+                <button class="btn" onclick="showPage('chapter4')">下一章</button>
+            </div>
+        </div>
+        <!-- 第四章 -->
+        <div class="center-card" id="chapter4" style="display:none;">
+            <h2>第四章：不褪色的光谱</h2>
+            <div class="subtitle">那些没被生活过滤的友谊<br>是她保留完整的另一重人格<br>在姐妹们的镜头里<br>永远住着二十岁的晚风</div>
+            <div class="videos">
+                <div class="video-slot"><video controls src="fri.MOV"></video></div>
+                <div class="video-slot"><video controls src="aunt.MOV"></video></div>
+            </div>
+            <div style="margin-top:18px;display:flex;justify-content:space-between;width:100%;">
+                <button class="btn" onclick="showPage('chapter3')">上一章</button>
+                <button class="btn" onclick="showPage('chapter5')">下一章</button>
+            </div>
+        </div>
+        <!-- 第五章 -->
+        <div class="center-card" id="chapter5" style="display:none;">
+            <h2>第五章：自转的星球</h2>
+            <div class="subtitle">当她暂时卸下所有社会身份<br>旅途中姿意的笑脸<br>工作中奋斗的身影<br>才是生命最本真的模样</div>
+            <div class="videos">
+                <div class="video-slot"><video controls src="kose.MOV"></video></div>
+                <div class="video-slot"><video controls src="japan.MOV"></video></div>
+                <div class="video-slot"><video controls src="duck.MOV"></video></div>
+            </div>
+            <div style="margin-top:18px;display:flex;justify-content:space-between;width:100%;">
+                <button class="btn" onclick="showPage('chapter4')">上一章</button>
+                <button class="btn" onclick="showPage('end')">结束展览</button>
+            </div>
+        </div>
+        <!-- 结束页 -->
+        <div class="center-card" id="end" style="display:none;">
+            <div class="end">
+                谨以此展献给<br>
+                <b>周奕女士</b><br>
+                1979-∞<br>
+                感谢您从未停止自我生长<br>
+                在45年的人生折叠中<br>
+                为每个身份保留着<br>
+                恰到好处的37℃温暖<br>
+                母亲节快乐<br>
+                我们永远的恒星
+            </div>
+            <button class="btn" style="margin-top:32px;" onclick="showPage('home')">回到首页 重新观看</button>
+        </div>
+    </div>
+    <script>
+        // 页面切换逻辑
+        function showPage(page) {
+            const ids = ['loading','preface','home','chapter1','chapter2','chapter3','chapter4','chapter5','end'];
+            ids.forEach(id => document.getElementById(id).style.display = 'none');
+            document.getElementById(page).style.display = 'block';
+            // 顶部导航高亮
+            for(let i=1;i<=5;i++){
+                document.getElementById('nav-ch'+i).classList.remove('active');
+            }
+            if(page.startsWith('chapter')){
+                let idx = page.replace('chapter','');
+                if(document.getElementById('nav-ch'+idx))
+                    document.getElementById('nav-ch'+idx).classList.add('active');
+            }
+        }
+        // 加载页自动跳转到序言
+        setTimeout(()=>{ showPage('preface'); }, 1800);
+    </script>
+    <!--
+    替换背景图片：
+    请将你喜欢的吉卜力风格图片重命名为 your-image.jpg 并放在本目录下。
+    替换视频：
+    1. 本地浏览器可直接将 <video controls src=""> 的 src 属性改为本地视频路径或网络视频链接。
+    2. 如需嵌入B站、腾讯视频等外链，可将 <video> 标签替换为 <iframe>，并填写对应的 src。
+    -->
+</body>
+</html> 
